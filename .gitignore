@@ -1,1 +1,34 @@
-node_modules
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Nodemon
+nodemon.json
+
+# Build outputs (if any)
+dist/
+build/
+
+# MongoDB / database dumps
+dump/
+*.bson
+*.json
+
+# Optional: exclude MySQL local dumps if you make them
+*.sql
