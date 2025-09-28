@@ -1,0 +1,58 @@
+'use strict';
+const { Model } = require('sequelize');
+
+module.exports = (sequelize, Sequelize) => {
+  class Appointment extends Model {
+    static associate(models) {
+
+      Appointment.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+
+
+      Appointment.belongsTo(models.Doctor, {
+        foreignKey: 'doctor_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+    }
+  }
+
+  Appointment.init(
+    {
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+
+        }
+      },
+      doctor_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Doctors', 
+
+        }
+      },
+      appointment_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      status: {
+        type: Sequelize.ENUM('pending', 'confirmed', 'cancelled'),
+        allowNull: false,
+        defaultValue: 'pending'
+      }
+    },
+    {
+      sequelize,
+      modelName: 'Appointment',
+    }
+  );
+
+  return Appointment;
+};
