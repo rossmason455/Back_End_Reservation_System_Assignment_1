@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const appointments = [];
 
-    // assuming you have 15 users and 10 doctors
+
     for (let i = 0; i < 20; i++) {
       appointments.push({
         user_id: faker.number.int({ min: 1, max: 15 }),
