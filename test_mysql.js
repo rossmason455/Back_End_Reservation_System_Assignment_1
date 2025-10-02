@@ -7,7 +7,7 @@ async function runTest() {
   } catch (err) {
     console.error('MySQL connection failed:', err.message);
   } finally {
-    await pool.end(); // close the pool after test
+    await pool.end(); 
   }
 }
 

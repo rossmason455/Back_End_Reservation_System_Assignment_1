@@ -15,7 +15,7 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       });
-    }
+         }
 
     await queryInterface.bulkInsert('appointments', appointments, {});
   },
