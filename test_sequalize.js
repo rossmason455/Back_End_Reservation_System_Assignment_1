@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
 
-// Adjust with your own connection details
 const sequelize = new Sequelize('reservation_db', 'root', '', {
   host: 'localhost',
   dialect: 'mysql'

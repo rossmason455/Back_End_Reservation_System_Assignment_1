@@ -18,6 +18,10 @@ module.exports = {
         allowNull: false,
         unique: true
       },
+      password: {                      
+        type: Sequelize.STRING(255),
+        allowNull: false
+      },
       phone: {
         type: Sequelize.STRING(20),
         allowNull: true
