@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   class Appointment extends Model {
     static associate(models) {
 
@@ -23,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
   Appointment.init(
     {
       user_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'Users',
@@ -31,7 +31,7 @@ module.exports = (sequelize, Sequelize) => {
         }
       },
       doctor_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'Doctors', 
@@ -39,11 +39,11 @@ module.exports = (sequelize, Sequelize) => {
         }
       },
       appointment_date: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
         allowNull: false
       },
       status: {
-        type: Sequelize.ENUM('pending', 'confirmed', 'cancelled'),
+        type: DataTypes.ENUM('pending', 'confirmed', 'cancelled'),
         allowNull: false,
         defaultValue: 'pending'
       }

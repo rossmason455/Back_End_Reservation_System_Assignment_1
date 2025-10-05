@@ -18,30 +18,21 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
       clinic_name: {
-        type: Sequelize.STRING(100),
+        type: DataTypes.STRING(100),
         allowNull: false
       },
       address: {
-        type: Sequelize.STRING(200),
+        type: DataTypes.STRING(200),
         allowNull: true
       },
       phone: {
-        type: Sequelize.STRING(20),
+        type: DataTypes.STRING(20),
         allowNull: true
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
-      }
+     
   }, {
     sequelize,
     modelName: 'Clinic',

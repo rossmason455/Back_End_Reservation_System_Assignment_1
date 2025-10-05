@@ -1,15 +1,18 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { body, validationResult } = require("express-validator");
-const user = require("../models/user");
+const { validationResult } = require("express-validator");
+const { User } = require('../models');
+
+require('dotenv').config();
 const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
-  const { name, email, password } = req.body;
+  const { name, email, password, phone } = req.body;
     
     try {
     const existingUser = await User.findOne({ where: { email } });
@@ -18,7 +21,7 @@ exports.register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ name, email, password: hashedPassword });
+    const user = await User.create({ name, email, password: hashedPassword, phone });
 
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
       expiresIn: "1h",
@@ -26,7 +29,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully", token });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("REGISTER ERROR:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

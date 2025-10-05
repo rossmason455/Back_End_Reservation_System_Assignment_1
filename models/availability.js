@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Availability.init({
     doctor_id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'Doctors',
@@ -23,15 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       available_date: {
-        type: Sequelize.DATEONLY,
+        type: DataTypes.DATEONLY,
         allowNull: false
       },
       start_time: {
-        type: Sequelize.TIME,
+        type: DataTypes.TIME,
         allowNull: false
       },
       end_time: {
-        type: Sequelize.TIME,
+        type: DataTypes.TIME,
         allowNull: false
       }
     },
