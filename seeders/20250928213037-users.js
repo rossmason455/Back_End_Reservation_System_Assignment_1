@@ -6,12 +6,21 @@ module.exports = {
     const users = [];
 
 
-    for (let i = 0; i < 15; i++) {
+    const roles = ['patient', 'doctor'];
+
+
+
+    for (let i = 0; i < 30; i++) {
+
+       const role = roles[Math.floor(Math.random() * roles.length)];
+
+
       users.push({
-        name: faker.person.fullName(),
+        username: faker.internet.username(),
         email: faker.internet.email(),
         password: await bcrypt.hash('password123', 10),
         phone: faker.phone.number(),
+        role: role,
         created_at: new Date(),
         updated_at: new Date()
       });

@@ -10,14 +10,21 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE'
       });
+
+
     }
   }
 
   Doctor.init(
+
+    
     {
+
+
       name: {
         type: DataTypes.STRING(100),
-        allowNull: false
+        allowNull: false,
+      
       },
       specialization: {
         type: DataTypes.STRING(100),

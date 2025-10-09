@@ -5,11 +5,12 @@ const { faker } = require('@faker-js/faker');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+
     const doctors = [];
 
     for (let i = 0; i < 20; i++) { 
       doctors.push({
-    name: faker.person.fullName(),
+        name: `Dr. ${faker.person.fullName()}`,
         specialization: faker.helpers.arrayElement([
           'Cardiology',
           'Dermatology',
