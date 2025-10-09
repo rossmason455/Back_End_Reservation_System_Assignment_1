@@ -10,6 +10,7 @@ module.exports = {
 
     for (let i = 0; i < 20; i++) { 
       doctors.push({
+        user_id: faker.number.int({ min: 1, max: 20 }),
         name: `Dr. ${faker.person.fullName()}`,
         specialization: faker.helpers.arrayElement([
           'Cardiology',

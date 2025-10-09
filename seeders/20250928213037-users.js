@@ -6,21 +6,30 @@ module.exports = {
     const users = [];
 
 
-    const roles = ['patient', 'doctor'];
+    const numDoctors = 20;
+    const numPatients = 20;
 
 
 
-    for (let i = 0; i < 30; i++) {
-
-       const role = roles[Math.floor(Math.random() * roles.length)];
-
-
+     for (let i = 0; i < numDoctors; i++) {
       users.push({
         username: faker.internet.username(),
         email: faker.internet.email(),
         password: await bcrypt.hash('password123', 10),
         phone: faker.phone.number(),
-        role: role,
+        role: 'doctor',
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+    }
+
+    for (let i = 0; i < numPatients; i++) {
+      users.push({
+        username: faker.internet.username(),
+        email: faker.internet.email(),
+        password: await bcrypt.hash('password123', 10),
+        phone: faker.phone.number(),
+        role: 'patient',
         created_at: new Date(),
         updated_at: new Date()
       });

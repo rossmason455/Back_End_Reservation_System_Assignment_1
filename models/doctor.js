@@ -12,6 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       });
 
 
+       Doctor.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
+
+
     }
   }
 
@@ -21,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     {
 
 
+       user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'Users' }
+    },
       name: {
         type: DataTypes.STRING(100),
         allowNull: false,

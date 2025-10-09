@@ -8,7 +8,7 @@ module.exports = {
 
     for (let i = 0; i < 20; i++) {
       appointments.push({
-        user_id: faker.number.int({ min: 1, max: 15 }),
+        user_id: faker.number.int({ min: 21, max: 40 }),
         doctor_id: faker.number.int({ min: 1, max: 20 }),
         appointment_date: faker.date.soon({ days: 30 }),
         status: faker.helpers.arrayElement(['pending', 'confirmed', 'cancelled']),
