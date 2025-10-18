@@ -10,10 +10,27 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
+
+
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else if (process.env.DATABASE_URL) {
+
+  sequelize = new Sequelize(process.env.DATABASE_URL, config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  const dbHost = process.env.DB_HOST || config.host || '127.0.0.1';
+  const dbName = process.env.DB_NAME || config.database;
+  const dbUser = process.env.DB_USER || config.username;
+  const dbPass = process.env.DB_PASS !== undefined ? process.env.DB_PASS : config.password;
+  const dbPort = process.env.DB_PORT || config.port || 3306;
+  const dbDialect = process.env.DB_DIALECT || config.dialect || 'mysql';
+
+  sequelize = new Sequelize(dbName, dbUser, dbPass, {
+    host: dbHost,
+    port: dbPort,
+    dialect: dbDialect,
+    logging: config.logging || false,
+  });
 }
 
 fs
