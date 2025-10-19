@@ -6,11 +6,16 @@ const { faker } = require('@faker-js/faker');
 module.exports = {
   async up (queryInterface, Sequelize) {
 
+     const doctorUsers = await queryInterface.sequelize.query(
+      `SELECT id FROM Users WHERE role = 'doctor';`
+    );
+    const doctorUserIds = doctorUsers[0].map(u => u.id);
+
     const doctors = [];
 
-    for (let i = 0; i < 20; i++) { 
+    for (let i = 0; i < doctorUserIds.length; i++) { 
       doctors.push({
-        user_id: faker.number.int({ min: 1, max: 20 }),
+        user_id: doctorUserIds[i],
         name: `Dr. ${faker.person.fullName()}`,
         specialization: faker.helpers.arrayElement([
           'Cardiology',
