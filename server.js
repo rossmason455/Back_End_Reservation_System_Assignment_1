@@ -2,9 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const auth = require('./routes/auth');
+const doctorRoutes = require('./routes/doctorRoutes');
 
 app.use(express.json());
 app.use('/api/auth', auth);
+app.use('/api', doctorRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello from Node API');

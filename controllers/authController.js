@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
 
-  const { username, email, password, phone } = req.body;
+  const { username, email, password, phone, role } = req.body;
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -31,6 +31,7 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       phone,
+      role
     });
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role}, JWT_SECRET, {
@@ -68,7 +69,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     res.status(200).json({
