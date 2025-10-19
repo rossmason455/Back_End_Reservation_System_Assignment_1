@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const auth = require('./routes/auth');
 const doctorRoutes = require('./routes/doctorRoutes');
+require('./mongodb_models/index');
 
 app.use(express.json());
 app.use('/api/auth', auth);
