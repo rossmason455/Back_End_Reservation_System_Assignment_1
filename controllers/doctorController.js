@@ -107,3 +107,62 @@ console.log("Type of doctor.id:", typeof doctor.id);
 /* ****************************************************************************************** */
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
+
+/* ****************************************************************************************** */
+/* ************************************** GET PROFILE *************************************** */
+/* ****************************************************************************************** */
+
+
+exports.getDoctorProfileByName = async (req, res) => {
+  try {
+    const doctorName = req.params.name; 
+
+ 
+    const doctor = await Doctor.findOne({
+      where: {
+        name: doctorName
+      }
+    });
+
+    if (!doctor) return res.status(404).json({ message: "Doctor not found" });
+
+
+    const mongoProfile = await DoctorProfile.findOne({ my_sql_resource_id: Number(doctor.id) });
+    if (!mongoProfile)
+      return res.status(404).json({ message: "MongoDB doctor profile not found" });
+
+ 
+    res.status(200).json({
+      doctor: {
+        id: doctor.id,
+        user_id: doctor.user_id,
+        name: doctor.name,
+        specialization: doctor.specialization,
+        clinic_id: doctor.clinic_id,
+        created_at: doctor.created_at,
+        updated_at: doctor.updated_at,
+      },
+      mongoProfile: {
+        _id: mongoProfile._id,
+        my_sql_resource_id: mongoProfile.my_sql_resource_id,
+        biography: mongoProfile.biography,
+        languages: mongoProfile.languages,
+        education: mongoProfile.education,
+        reviews: mongoProfile.reviews || [],
+        createdAt: mongoProfile.createdAt,
+        updatedAt: mongoProfile.updatedAt,
+        __v: mongoProfile.__v,
+      },
+    });
+  } catch (err) {
+    console.error("GET DOCTOR PROFILE BY NAME ERROR:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
+
+/* ****************************************************************************************** */
+/* ************************************* END ************************************************ */
+/* ****************************************************************************************** */

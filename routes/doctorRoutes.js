@@ -37,4 +37,12 @@ router.put(
   doctorController.updateProfile
 );
 
+
+
+/*************************************** GET PROFILE BY NAME **************************************/
+router.get(
+  "/doctorProfile/name/:name",
+  authMiddleware,
+  doctorController.getDoctorProfileByName
+);
 module.exports = router;
