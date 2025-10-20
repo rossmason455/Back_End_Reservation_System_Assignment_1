@@ -60,16 +60,12 @@ exports.updateProfile = async (req, res) => {
         .json({ message: "Only doctor users can update profiles" });
     }
 
-    const { name, specialization, clinicName } = req.body;
+    const { name, specialization, clinicName, biography, languages, education } = req.body;
 
-    const doctorProfile = await Doctor.findOne({
-      where: { user_id: req.user.id },
-    });
-    if (!doctorProfile) {
-      return res.status(404).json({ message: "Doctor profile not found" });
-    }
+    const doctor = await Doctor.findOne({ where: { user_id: req.user.id } });
+    if (!doctor) return res.status(404).json({ message: "Doctor profile not found" });
 
-    let clinic_id = doctorProfile.clinic_id;
+    let clinic_id = doctor.clinic_id;
     if (clinicName) {
       const clinic = await Clinic.findOne({
         where: { clinic_name: clinicName },
@@ -78,14 +74,31 @@ exports.updateProfile = async (req, res) => {
       clinic_id = clinic.id;
     }
 
-    await doctorProfile.update({
-      name: name || doctorProfile.name,
-      specialization: specialization || doctorProfile.specialization,
+    await doctor.update({
+      name: name || doctor.name,
+      specialization: specialization || doctor.specialization,
       clinic_id,
     });
 
-    res.status(200).json({ message: "Doctor profile updated", doctorProfile });
-  } catch (err) {
+    console.log("Searching MongoDB with my_sql_resource_id:", doctor.id);
+console.log("Type of doctor.id:", typeof doctor.id);
+
+     const mongoProfile = await DoctorProfile.findOne({ my_sql_resource_id: Number(doctor.id) });
+    if (!mongoProfile)
+      return res.status(404).json({ message: "MongoDB doctor profile not found" });
+
+    if (biography) mongoProfile.biography = biography;
+    if (languages) mongoProfile.languages = Array.isArray(languages) ? languages : languages.split(",").map(l => l.trim());
+    if (education) mongoProfile.education = Array.isArray(education) ? education : education.split(",").map(e => e.trim());
+
+    await mongoProfile.save();
+
+    res.status(200).json({ message: "Doctor profile updated in both SQL and MongoDB", 
+        doctor, 
+        mongoProfile 
+    });
+  
+    } catch (err) {
     console.error("UPDATE PROFILE ERROR:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }

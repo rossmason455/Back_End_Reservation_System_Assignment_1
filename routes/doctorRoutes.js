@@ -30,6 +30,9 @@ router.put(
     body("name").optional().notEmpty().withMessage("Name cannot be empty"),
     body("specialization").optional().notEmpty(),
     body("clinicName").optional().notEmpty(),
+    body("biography").optional().notEmpty().withMessage("Biography cannot be empty"),
+    body("languages").optional().notEmpty().withMessage("Languages cannot be empty"),
+    body("education").optional().notEmpty().withMessage("Education cannot be empty"),
   ],
   doctorController.updateProfile
 );
