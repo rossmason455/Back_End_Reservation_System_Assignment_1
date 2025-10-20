@@ -39,7 +39,7 @@ router.put(
 
 
 
-/*************************************** GET PROFILE BY NAME **************************************/
+/*************************************** GET PROFILE BY NAME ROUTE **************************************/
 router.get(
   "/doctorProfile/name/:name",
   authMiddleware,

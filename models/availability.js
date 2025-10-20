@@ -32,15 +32,26 @@ module.exports = (sequelize, DataTypes) => {
       end_time: {
         type: DataTypes.TIME,
         allowNull: false
+      },
+       status: {
+        type: DataTypes.ENUM('available', 'booked', 'blocked'),
+        defaultValue: 'available'
       }
     },
-    {
-      sequelize,
+   {
+         sequelize,
       modelName: 'Availability',
+      tableName: 'Availability',
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      indexes: [
+        {
+          unique: true,
+          fields: ['doctor_id', 'start_datetime', 'end_datetime']
+        }
+      ]
     
-  }, {
-    sequelize,
-    modelName: 'Availability',
   });
   return Availability;
 };

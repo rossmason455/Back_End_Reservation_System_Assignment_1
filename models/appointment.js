@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
+
+        Appointment.belongsTo(models.Availability, {
+        foreignKey: 'availability_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
     }
   }
 
@@ -38,6 +44,13 @@ module.exports = (sequelize, DataTypes) => {
 
         }
       },
+
+      availability_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: 'Availability', key: 'availability_id' }
+      },
+      
       appointment_date: {
         type: DataTypes.DATE,
         allowNull: false

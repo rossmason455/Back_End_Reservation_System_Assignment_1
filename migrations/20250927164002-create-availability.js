@@ -31,6 +31,10 @@ module.exports = {
         type: Sequelize.TIME,
         allowNull: false
       },
+       status: {
+        type: Sequelize.ENUM('available', 'booked', 'blocked'),
+        defaultValue: 'available'
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -41,6 +45,12 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       }
+    });
+
+        await queryInterface.addConstraint('Availability', {
+      type: 'unique',
+      fields: ['doctor_id', 'start_datetime', 'end_datetime'],
+      name: 'unique_doctor_slot'
     });
   },
   async down(queryInterface, Sequelize) {
