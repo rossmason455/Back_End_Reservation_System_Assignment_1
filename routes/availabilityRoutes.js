@@ -31,4 +31,16 @@ router.post(
   availabilityController.createSlot
 );
 
+/*************************************** UPDATE TIME SLOT ROUTE **************************************/
+router.put(
+  "/availability/:slotId",
+  authMiddleware,
+  [
+    body("available_date").optional().isDate().withMessage("Must be a valid date"),
+    body("start_time").optional().matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage("Start time must be HH:mm"),
+    body("end_time").optional().matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage("End time must be HH:mm")
+  ],
+  availabilityController.updateSlot
+);
+
 module.exports = router;
