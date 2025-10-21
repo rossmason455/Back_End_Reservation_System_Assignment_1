@@ -33,17 +33,21 @@ module.exports = {
           
             const end = new Date(start);
             end.setHours(start.getHours() + 1);
-          }
-        }
 
-        availabilities.push({
+          
+              availabilities.push({
           doctor_id: doctorId,
+          available_date: start.toISOString().split("T")[0],
           start_datetime: start,
               end_datetime: end,
               status: 'available',
           created_at: new Date(),
           updated_at: new Date(),
         });
+          }
+        }
+
+      
       }
     }
     await queryInterface.bulkInsert("availabilities", availabilities, {});
