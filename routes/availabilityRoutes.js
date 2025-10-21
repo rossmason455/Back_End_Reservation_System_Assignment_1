@@ -43,4 +43,14 @@ router.put(
   availabilityController.updateSlot
 );
 
+
+/*************************************** DELETE TIME SLOT ROUTE **************************************/
+router.delete(
+  "/availability/:slotId",
+  authMiddleware,
+  availabilityController.deleteSlot
+);
+
+
+
 module.exports = router;

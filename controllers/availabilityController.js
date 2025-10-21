@@ -127,3 +127,48 @@ exports.updateSlot = async (req, res) => {
 /* ****************************************************************************************** */
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
+
+
+
+/* ****************************************************************************************** */
+/* ************************************* UPDATE TIME SLOT *********************************** */
+/* ****************************************************************************************** */
+
+
+exports.deleteSlot = async (req, res) => {
+  try {
+    if (req.user.role !== "doctor") {
+      return res.status(403).json({ message: "Only doctors can delete slots." });
+    }
+
+     const slotId = req.params.slotId;
+
+    const doctor = await Doctor.findOne({ where: { user_id: req.user.id } });
+    if (!doctor) {
+      return res.status(403).json({ message: "Doctor profile not found." });
+    }
+
+    const slot = await Availability.findOne({
+      where: {
+        id: slotId,
+        doctor_id: doctor.id
+      }
+    });
+
+    if (!slot) {
+      return res.status(404).json({ message: "Time slot not found" });
+    }
+
+    await slot.destroy();
+
+    res.status(200).json({ message: "Time slot deleted successfully." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+/* ****************************************************************************************** */
+/* ************************************* END ************************************************ */
+/* ****************************************************************************************** */
