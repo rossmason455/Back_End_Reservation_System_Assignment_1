@@ -31,7 +31,9 @@ module.exports = (sequelize, DataTypes) => {
        user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'Users' }
+      references: { 
+        model: 'Users' 
+      }
     },
       name: {
         type: DataTypes.STRING(100),

@@ -25,12 +25,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: false
       },
-      start_time: {
-        type: DataTypes.TIME,
+     start_datetime: {
+        type: DataTypes.DATE,
         allowNull: false
       },
-      end_time: {
-        type: DataTypes.TIME,
+      end_datetime: {
+        type: DataTypes.DATE,
         allowNull: false
       },
        status: {

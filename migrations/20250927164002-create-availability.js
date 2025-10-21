@@ -23,12 +23,12 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false
       },
-      start_time: {
-        type: Sequelize.TIME,
+      start_datetime: {
+        type: Sequelize.DATE,
         allowNull: false
       },
-      end_time: {
-        type: Sequelize.TIME,
+      end_datetime: {
+        type: Sequelize.DATE,
         allowNull: false
       },
        status: {

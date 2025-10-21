@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
+          model: 'Users'
 
         }
       },
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Doctors', 
+          model: 'Doctors'
 
         }
       },
@@ -48,7 +48,9 @@ module.exports = (sequelize, DataTypes) => {
       availability_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: 'Availability', key: 'availability_id' }
+        references: { 
+          model: 'Availability'
+        }
       },
       
       appointment_date: {
