@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Resource.init(
     {
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('doctor', 'meeting room', 'restaurant table'),
         allowNull: false
       },
       type: {
