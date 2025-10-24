@@ -1,12 +1,12 @@
 'use strict';
-
+const { faker } = require('@faker-js/faker');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    
+    const resources = [];
     for (let i = 0; i < 20; i++) {
       resources.push({
-        name: `Dr. ${faker.name.lastName()}`,
+        name: `Dr. ${faker.person.lastName()}`,
         type: 'doctor',
         status: 'available',
         created_at: new Date(),
@@ -16,7 +16,7 @@ module.exports = {
 
     
     for (let i = 0; i < 20; i++) {
-      const restaurantName = `${faker.company.bsAdjective()} ${faker.company.companyName()}`;
+      const restaurantName = `${faker.company.buzzAdjective()} ${faker.company.name()}`;
       resources.push({
         name: restaurantName,
         type: 'restaurant',
@@ -37,7 +37,10 @@ module.exports = {
         updated_at: new Date(),
       });
     }
+
+    await queryInterface.bulkInsert('resources', resources, {});
   },
+
 
   async down (queryInterface, Sequelize) {
     await queryInterface.bulkDelete('resources', null, {});

@@ -1,5 +1,5 @@
 'use strict';
-
+const { faker } = require('@faker-js/faker');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -25,7 +25,7 @@ module.exports = {
       bookings.push({
         user_id: user.id,
         resource_id: resource.id,
-        booking_date: faker.date.future(),
+        booking_date: bookingDate,
         start_time: `${String(startHour).padStart(2, '0')}:00:00`,
         end_time: `${String(endHour).padStart(2, '0')}:00:00`,
         status: faker.helpers.arrayElement(['pending', 'confirmed', 'cancelled']),

@@ -1,5 +1,5 @@
 'use strict';
-
+const { faker } = require('@faker-js/faker');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -15,9 +15,11 @@ module.exports = {
       if (faker.datatype.boolean()) {
         payments.push({
           booking_id: booking.id,
-          amount: faker.finance.amount({ min: 20, max: 500, dec: 2 }),
+          amount: faker.finance.amount(20, 500, 2 ),
           status: faker.helpers.arrayElement(['pending', 'completed', 'failed']),
           payment_date: new Date(),
+          created_at: new Date(),
+          updated_at: new Date(),
         });
       }
     }
