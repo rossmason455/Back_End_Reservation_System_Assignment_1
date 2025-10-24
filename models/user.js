@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     
     static associate(models) {
-
+       User.hasMany(models.Booking, { foreignKey: 'user_id' });
+      User.hasMany(models.Payment, { foreignKey: 'user_id' });
     }
   }
   User.init({
@@ -20,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true
       },
        password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false
     },
       phone: {
@@ -28,9 +29,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       role: {
-  type: DataTypes.ENUM('patient', 'doctor', 'admin'),
+  type: DataTypes.ENUM('user', 'admin'),
   allowNull: false,
-  defaultValue: 'patient'
+  defaultValue: 'user'
 }
      
   }, {
