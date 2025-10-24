@@ -31,7 +31,7 @@ module.exports = {
       const roomName = `Meeting Room ${faker.word.adjective()} ${faker.word.noun()}`;
       resources.push({
         name: roomName,
-        type: 'meeting_room',
+        type: 'meeting room',
         status: 'available',
         created_at: new Date(),
         updated_at: new Date(),

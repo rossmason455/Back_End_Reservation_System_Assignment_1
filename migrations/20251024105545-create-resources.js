@@ -15,7 +15,7 @@ module.exports = {
         allowNull: false,
       },
       type: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.ENUM('doctor', 'restaurant', 'meeting room'),
         allowNull: false,
       },
       status: {
