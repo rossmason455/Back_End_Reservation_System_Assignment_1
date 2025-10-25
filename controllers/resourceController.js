@@ -3,6 +3,12 @@ const DoctorDetail = require("../mongodb_models/doctorDetail");
 const RestaurantDetail = require("../mongodb_models/restaurantDetail");
 const MeetingRoomDetail = require("../mongodb_models/meetingRoomDetail");
 
+
+/* ****************************************************************************************** */
+/* ************************************* GET A SINGLE RESOURCE ****************************** */
+/* ****************************************************************************************** */
+
+
 exports.getResourceById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -46,3 +52,7 @@ exports.getResourceById = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+/* ****************************************************************************************** */
+/* ************************************* END ************************************************ */
+/* ****************************************************************************************** */
