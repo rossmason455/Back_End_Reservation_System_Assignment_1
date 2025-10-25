@@ -65,7 +65,7 @@ exports.createBooking = async (req, res) => {
 
 
 /* ****************************************************************************************** */
-/* ************************************* GET ALL USER BOOKINGS ****************************** */
+/* ************************************* GET ALL OF A USERS BOOKINGS ************************ */
 /* ****************************************************************************************** */
 
 
@@ -121,3 +121,58 @@ exports.getUserBookings = async (req, res) => {
 /* ****************************************************************************************** */
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
+
+exports.getBookingById = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const bookingId = req.params.id;
+
+    
+    const booking = await Booking.findOne({
+      where: { id: bookingId },
+      include: [{ model: Resource }],
+    });
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    
+    if (booking.user_id !== userId && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    
+    const resource = booking.Resource;
+    let mongoDetail = null;
+
+    if (resource.type === "doctor") {
+      mongoDetail = await DoctorDetail.findOne({ my_sql_resource_id: resource.id });
+    } else if (resource.type === "restaurant table") {
+      mongoDetail = await RestaurantDetail.findOne({ my_sql_resource_id: resource.id });
+    } else if (resource.type === "meeting room") {
+      mongoDetail = await MeetingRoomDetail.findOne({ my_sql_resource_id: resource.id });
+    }
+
+    
+    const response = {
+      id: booking.id,
+      booking_date: booking.booking_date,
+      start_time: booking.start_time,
+      end_time: booking.end_time,
+      status: booking.status,
+      resource: {
+        id: resource.id,
+        name: resource.name,
+        type: resource.type,
+        status: resource.status,
+        details: mongoDetail || null,
+      },
+    };
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.error("Error fetching booking:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};

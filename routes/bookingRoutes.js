@@ -7,4 +7,6 @@ router.post("/create", authMiddleware, bookingController.createBooking);
 
 router.get("/", authMiddleware, bookingController.getUserBookings);
 
+router.get("/:id", authMiddleware, bookingController.getBookingById);
+
 module.exports = router;
