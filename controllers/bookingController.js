@@ -122,6 +122,10 @@ exports.getUserBookings = async (req, res) => {
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
 
+/* ****************************************************************************************** */
+/* ************************************* GET SINGLE USER BOOKING **************************** */
+/* ****************************************************************************************** */
+
 exports.getBookingById = async (req, res) => {
   try {
     const userId = req.user.id; 
@@ -176,3 +180,57 @@ exports.getBookingById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+/* ****************************************************************************************** */
+/* ************************************* END ************************************************ */
+/* ****************************************************************************************** */
+
+
+/* ****************************************************************************************** */
+/* ************************************* UPDATE BOOKING STATUS ****************************** */
+/* ****************************************************************************************** */
+
+
+exports.updateBookingStatus = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const userRole = req.user.role;
+    const bookingId = req.params.id;
+    const { status } = req.body;
+
+    
+    const allowedStatuses = userRole === "admin" 
+      ? ["confirmed", "cancelled"] 
+      : ["cancelled"]; 
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(403).json({ 
+        message: `You are not allowed to set status to "${status}"` 
+      });
+    }
+
+    
+    const booking = await Booking.findOne({ where: { id: bookingId } });
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+   
+    if (userRole !== "admin" && booking.user_id !== userId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    
+    booking.status = status;
+    await booking.save();
+
+    res.status(200).json({ message: "Booking status updated", booking });
+  } catch (err) {
+    console.error("Error updating booking:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+/* ****************************************************************************************** */
+/* ************************************* END ************************************************ */
+/* ****************************************************************************************** */

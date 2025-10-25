@@ -9,4 +9,6 @@ router.get("/", authMiddleware, bookingController.getUserBookings);
 
 router.get("/:id", authMiddleware, bookingController.getBookingById);
 
+router.put("/:id", authMiddleware, bookingController.updateBookingStatus);
+
 module.exports = router;
