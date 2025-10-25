@@ -25,7 +25,16 @@ module.exports = (sequelize, DataTypes) => {
       status: {
         type: DataTypes.ENUM('available', 'unavailable'),
         allowNull: false
+      },
+       createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'  
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'  
       }
+      
     },
     {
       sequelize,
