@@ -9,4 +9,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 router.get("/:id", authMiddleware, resourceController.getResourceById);
 
+
+router.get("/", authMiddleware, resourceController.getAllResources);
+
 module.exports = router;
