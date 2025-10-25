@@ -30,7 +30,16 @@ module.exports = (sequelize, DataTypes) => {
       payment_date: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+      },
+        createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'  
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'  
       }
+      
     },
     {
       sequelize,

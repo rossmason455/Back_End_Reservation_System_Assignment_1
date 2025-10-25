@@ -4,7 +4,6 @@ const app = express();
 const auth = require('./routes/auth');
 const resourceRoutes = require('./routes/resourceRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-const resource = require('./models/resource');
 require('./mongodb_models/index');
 
 app.use(express.json());
