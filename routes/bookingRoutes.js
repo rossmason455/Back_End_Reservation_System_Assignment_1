@@ -5,4 +5,6 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 router.post("/create", authMiddleware, bookingController.createBooking);
 
+router.get("/", authMiddleware, bookingController.getUserBookings);
+
 module.exports = router;
