@@ -16,5 +16,7 @@ const doctorDetailSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const DoctorDetail = mongoose.model('DoctorDetail', doctorDetailSchema);
+const DoctorDetail = mongoose.models.DoctorDetail || mongoose.model('DoctorDetail', doctorDetailSchema);
+
+
 module.exports = DoctorDetail;

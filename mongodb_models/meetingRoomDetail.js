@@ -16,5 +16,7 @@ const meetingRoomDetailSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const MeetingRoomDetail = mongoose.model('MeetingRoomDetail', meetingRoomDetailSchema);
+const MeetingRoomDetail = mongoose.models.MeetingRoomDetail || mongoose.model('MeetingRoomDetail', meetingRoomDetailSchema);
+
+
 module.exports = MeetingRoomDetail;

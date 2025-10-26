@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
   Resource.init(
     {
       name: {
-        type: DataTypes.ENUM('doctor', 'meeting room', 'restaurant table'),
+        type: DataTypes.STRING(255),
         allowNull: false
       },
       type: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.ENUM('doctor', 'meeting room', 'restaurant table'),
         allowNull: false
       },
       status: {

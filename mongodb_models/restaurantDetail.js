@@ -20,5 +20,8 @@ const restaurantDetailSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const RestaurantDetail = mongoose.model('RestaurantDetail', restaurantDetailSchema);
+const RestaurantDetail = mongoose.models.RestaurantDetail || mongoose.model('RestaurantDetail', restaurantDetailSchema);
+
+
+
 module.exports = RestaurantDetail;
