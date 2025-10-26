@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --runInBand",
-    "serve": "node server.js",
-    "dev": "nodemon server.js"
+    "serve": "node start.js",
+    "dev": "nodemon start.js"
   },
   "keywords": [],
   "author": "",
@@ -33,5 +33,10 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
-  }
+  },
+  "jest": {
+  "testEnvironment": "node",
+  "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
+}
+
 }
