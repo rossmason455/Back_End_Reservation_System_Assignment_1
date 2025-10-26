@@ -1,10 +1,6 @@
 const { Payment, Booking, Resource } = require("../models");
 const { calculateAmount } = require("../utils/paymentUtils");
 
-
-
-
-
 /* ****************************************************************************************** */
 /* ************************************* CREATE PAYMENT FOR CONFIRMED BOOKING *************** */
 /* ****************************************************************************************** */
@@ -18,22 +14,24 @@ exports.createPayment = async (req, res) => {
     const booking = await Booking.findByPk(bookingId, { include: [Resource] });
     if (!booking) return res.status(404).json({ message: "Booking not found" });
 
-    
     if (booking.status !== "confirmed") {
-      return res.status(400).json({ message: "Cannot pay for unconfirmed booking" });
+      return res
+        .status(400)
+        .json({ message: "Cannot pay for unconfirmed booking" });
     }
 
-    
     if (userRole !== "admin" && booking.user_id !== userId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    
-    const existingPayment = await Payment.findOne({ where: { booking_id: bookingId } });
+    const existingPayment = await Payment.findOne({
+      where: { booking_id: bookingId },
+    });
     if (existingPayment) {
-      return res.status(400).json({ message: "Payment already exists for this booking" });
+      return res
+        .status(400)
+        .json({ message: "Payment already exists for this booking" });
     }
-
 
     const amount = calculateAmount(booking);
 
@@ -41,7 +39,7 @@ exports.createPayment = async (req, res) => {
       booking_id: booking.id,
       amount,
       status: "pending",
-      payment_date: new Date()
+      payment_date: new Date(),
     });
 
     res.status(201).json({ message: "Payment created", payment });
@@ -55,7 +53,6 @@ exports.createPayment = async (req, res) => {
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
 
-
 /* ****************************************************************************************** */
 /* ************************************* GET PAYMENT BY BOOKING ***************************** */
 /* ****************************************************************************************** */
@@ -66,30 +63,29 @@ exports.getPaymentByBooking = async (req, res) => {
     const userId = req.user.id;
     const userRole = req.user.role;
 
-    
     const booking = await Booking.findByPk(bookingId, { include: [Resource] });
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    
     if (userRole !== "admin" && booking.user_id !== userId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-   
     const payment = await Payment.findOne({
       where: { booking_id: bookingId },
-      include: [{ model: Booking, include: [Resource] }]
+      include: [{ model: Booking, include: [Resource] }],
     });
 
     if (!payment) {
-      return res.status(404).json({ message: "No payment found for this booking" });
+      return res
+        .status(404)
+        .json({ message: "No payment found for this booking" });
     }
 
     res.status(200).json({
       message: "Payment retrieved successfully",
-      payment
+      payment,
     });
   } catch (err) {
     console.error("GET PAYMENT ERROR:", err);
@@ -101,7 +97,6 @@ exports.getPaymentByBooking = async (req, res) => {
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
 
-
 /* ****************************************************************************************** */
 /* ************************************* GET ALL PAYMENTS (ADMIN) *************************** */
 /* ****************************************************************************************** */
@@ -110,7 +105,6 @@ exports.getAllPayments = async (req, res) => {
   try {
     const userRole = req.user.role;
 
-    
     if (userRole !== "admin") {
       return res.status(403).json({ message: "Access denied. Admins only." });
     }
@@ -119,10 +113,10 @@ exports.getAllPayments = async (req, res) => {
       include: [
         {
           model: Booking,
-          include: [Resource]
-        }
+          include: [Resource],
+        },
       ],
-      order: [["payment_date", "DESC"]]
+      order: [["payment_date", "DESC"]],
     });
 
     if (!payments || payments.length === 0) {
@@ -132,14 +126,13 @@ exports.getAllPayments = async (req, res) => {
     res.status(200).json({
       message: "All payments retrieved",
       count: payments.length,
-      payments
+      payments,
     });
   } catch (err) {
     console.error("GET ALL PAYMENTS ERROR:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-
 
 /* ****************************************************************************************** */
 /* ************************************* END ************************************************ */
