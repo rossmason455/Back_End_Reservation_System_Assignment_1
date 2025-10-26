@@ -15,7 +15,7 @@ describe('User / Auth Endpoints', () => {
     role: 'user',
   };
 
-  
+    /* ************************ REGISTER ************************ */
     it('should register a new user', async () => {
     const res = await request(app)
       .post('/api/auth/register')
@@ -35,5 +35,37 @@ describe('User / Auth Endpoints', () => {
     expect(res.body).toHaveProperty('errors');
   });
 
+  /* ************************ LOGIN ************************ */
+  it('should login successfully with correct credentials', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ email: testUser.email, password: testUser.password });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('token');
+    authToken = res.body.token; 
+  });
+
+  it('should fail login with wrong password', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ email: testUser.email, password: 'wrongpassword' });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.message).toBe('Invalid credentials');
+  });
+
+    /* ************************ LOGOUT ************************ */
+  it('should logout successfully', async () => {
+    const res = await request(app)
+      .post('/api/auth/logout')
+      .set('Authorization', `Bearer ${authToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('Logged out successfully');
+  });
+
+
 });
+
 
