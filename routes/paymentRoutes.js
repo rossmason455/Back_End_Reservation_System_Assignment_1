@@ -7,4 +7,6 @@ router.post("/:bookingId/pay", authMiddleware, paymentController.createPayment);
 
 router.get("/:bookingId", authMiddleware, paymentController.getPaymentByBooking);
 
+router.get("/", authMiddleware, paymentController.getAllPayments);
+
 module.exports = router;

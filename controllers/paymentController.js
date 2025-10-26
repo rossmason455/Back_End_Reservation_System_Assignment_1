@@ -132,7 +132,39 @@ exports.getPaymentByBooking = async (req, res) => {
 /* ************************************* GET ALL PAYMENTS (ADMIN) *************************** */
 /* ****************************************************************************************** */
 
+exports.getAllPayments = async (req, res) => {
+  try {
+    const userRole = req.user.role;
 
+    
+    if (userRole !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admins only." });
+    }
+
+    const payments = await Payment.findAll({
+      include: [
+        {
+          model: Booking,
+          include: [Resource]
+        }
+      ],
+      order: [["payment_date", "DESC"]]
+    });
+
+    if (!payments || payments.length === 0) {
+      return res.status(404).json({ message: "No payments found" });
+    }
+
+    res.status(200).json({
+      message: "All payments retrieved",
+      count: payments.length,
+      payments
+    });
+  } catch (err) {
+    console.error("GET ALL PAYMENTS ERROR:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
 
 
 /* ****************************************************************************************** */
