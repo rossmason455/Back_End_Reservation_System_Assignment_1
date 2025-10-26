@@ -89,4 +89,55 @@ describe("Payment Endpoints", () => {
   });
 
 
+   /* ************************************* DUPLICATE PAYMENT ********************************* */
+  
+  it("should not allow duplicate payments for the same booking", async () => {
+    const res = await request(app)
+      .post(`/api/payment/${confirmedBooking.id}/pay`)
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("message", "Payment already exists for this booking");
+  });
+
+    /* ************************************* GET PAYMENT BY BOOKING **************************** */
+
+  it("should retrieve payment details for a booking", async () => {
+    const res = await request(app)
+      .get(`/api/payment/${confirmedBooking.id}`)
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("message", "Payment retrieved successfully");
+    expect(res.body.payment).toHaveProperty("amount", "150.00");
+    expect(res.body.payment.Booking).toBeDefined();
+    expect(res.body.payment.Booking.Resource.name).toBe("Dr. Smith");
+  });
+
+    /* ************************************* GET ALL PAYMENTS (ADMIN) *************************** */
+
+  it("should allow admin to retrieve all payments", async () => {
+    const res = await request(app)
+      .get("/api/payment")
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("message", "All payments retrieved");
+    expect(Array.isArray(res.body.payments)).toBe(true);
+    expect(res.body.count).toBeGreaterThanOrEqual(1);
+  });
+
+
+  /* ************************************* ACCESS CONTROL ************************************* */
+
+  it("should prevent normal users from accessing all payments", async () => {
+    const res = await request(app)
+      .get("/api/payment")
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(403);
+    expect(res.body).toHaveProperty("message", "Access denied. Admins only.");
+  });
+
+
 });

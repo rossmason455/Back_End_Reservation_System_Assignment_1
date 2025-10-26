@@ -42,6 +42,8 @@ exports.createPayment = async (req, res) => {
       payment_date: new Date(),
     });
 
+
+
     res.status(201).json({ message: "Payment created", payment });
   } catch (err) {
     console.error("CREATE PAYMENT ERROR:", err);

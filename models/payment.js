@@ -21,7 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       amount: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
+
+        get() {
+            const rawValue = this.getDataValue('amount');
+            return rawValue === null ? null : parseFloat(rawValue).toFixed(2);
+        }
       },
       status: {
         type: DataTypes.ENUM('pending', 'completed', 'failed'),
