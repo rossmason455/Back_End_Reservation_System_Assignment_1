@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
 
-mongoose.connect("mongodb+srv://n00230645_db_user:cHH09IOEsM7mTs3l@reservationmongodb.ef34u6s.mongodb.net/reservation_mongodb?retryWrites=true&w=majority&appName=reservationmongodb")
-  .then(() => {
-        console.log("connected to database")
-    })
+const dbUri = process.env.NODE_ENV === 'test'
+  ? process.env.MONGO_URL_TEST 
+  : process.env.MONGO_URL;
+
+  mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
+     .then(() => console.log(`Connected to ${process.env.NODE_ENV || 'dev'} database`))
     .catch(() => {
-         console.log("connection failed")
+         console.log("connection failed", err)
     })

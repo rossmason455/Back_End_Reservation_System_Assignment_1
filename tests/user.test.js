@@ -15,9 +15,8 @@ describe('User / Auth Endpoints', () => {
     role: 'user',
   };
 
-
-    /* ************************ REGISTER ************************ */
-  it('should register a new user', async () => {
+  
+    it('should register a new user', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send(testUser);
