@@ -86,6 +86,42 @@ exports.createPayment = async (req, res) => {
 /* ************************************* GET PAYMENT BY BOOKING ***************************** */
 /* ****************************************************************************************** */
 
+exports.getPaymentByBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    
+    const booking = await Booking.findByPk(bookingId, { include: [Resource] });
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    
+    if (userRole !== "admin" && booking.user_id !== userId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+   
+    const payment = await Payment.findOne({
+      where: { booking_id: bookingId },
+      include: [{ model: Booking, include: [Resource] }]
+    });
+
+    if (!payment) {
+      return res.status(404).json({ message: "No payment found for this booking" });
+    }
+
+    res.status(200).json({
+      message: "Payment retrieved successfully",
+      payment
+    });
+  } catch (err) {
+    console.error("GET PAYMENT ERROR:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
 
 /* ****************************************************************************************** */
 /* ************************************* END ************************************************ */
