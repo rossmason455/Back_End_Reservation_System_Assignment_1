@@ -99,4 +99,26 @@ describe("Booking Endpoints", () => {
   });
 
 
+   /* ************************ GET BOOKINGS ************************ */
+  it("should fetch all bookings for the user", async () => {
+    const res = await request(app)
+      .get("/api/booking/")
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].resource.name).toBe("Dr. Smith");
+  });
+
+  it("should fetch a single booking by ID", async () => {
+    const res = await request(app)
+      .get(`/api/booking/${userBooking.id}`)
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.resource.name).toBe("Dr. Smith");
+    expect(res.body.booking_date).toBe("2025-11-01");
+  });
+
 });
