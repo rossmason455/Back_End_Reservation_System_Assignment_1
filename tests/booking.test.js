@@ -121,4 +121,36 @@ describe("Booking Endpoints", () => {
     expect(res.body.booking_date).toBe("2025-11-01");
   });
 
+   /* ************************ UPDATE BOOKING STATUS ************************ */
+  it("should allow user to cancel their own booking", async () => {
+    const res = await request(app)
+      .patch(`/api/booking/${userBooking.id}`)
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ status: "cancelled" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.booking.status).toBe("cancelled");
+  });
+
+  it("should NOT allow user to confirm their own booking", async () => {
+    const res = await request(app)
+      .patch(`/api/booking/${userBooking.id}`)
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ status: "confirmed" });
+
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("should allow admin to confirm a booking", async () => {
+    const res = await request(app)
+      .patch(`/api/booking/${userBooking.id}`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ status: "confirmed" });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.booking.status).toBe("confirmed");
+  });
+
+
+
 });
