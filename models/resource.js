@@ -39,6 +39,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Resource',
+      tableName: 'resources',     
+    freezeTableName: true,
+    timestamps: true,
+    createdAt: 'created_at',
+      updatedAt: 'updated_at',
+
     }
   );
 

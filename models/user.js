@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
       phone: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(50),
         allowNull: true
       },
       role: {
@@ -37,7 +37,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-     timestamps: true,         
+    timestamps: true, 
+    tableName: 'users',     
+    freezeTableName: true,        
     createdAt: 'created_at',  
     updatedAt: 'updated_at'
   });

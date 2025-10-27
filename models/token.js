@@ -39,6 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Token',
+      tableName: 'tokens',     
+      freezeTableName: true,
       timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',

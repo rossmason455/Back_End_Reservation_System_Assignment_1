@@ -14,30 +14,43 @@ services:
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_NAME=reservation_db
-      - DB_USER=root
-      - DB_PASS=
+      - DB_USER=reservation_user
+      - DB_PASS=R3serv@tionApp!
       - MONGO_URL=mongodb://mongo:27017/reservation_mongo
     ports:
       - "3000:3000"
     depends_on:
-      - mysql
-      - mongo
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
     volumes:
       - ./:/usr/src/app
-       - /usr/src/app/node_modules
-    command: npm run dev
+      - /usr/src/app/node_modules
+    
+    command: sh -c './setup.sh'
+    
+   
 
   mysql:
     image: mysql:8.0
     container_name: reservation_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: some_secure_root_password
+      MYSQL_USER: reservation_user
+      MYSQL_PASSWORD: R3serv@tionApp!
       MYSQL_DATABASE: reservation_db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   mongo:
     image: mongo:6.0
@@ -47,6 +60,12 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5  
 
 volumes:
   mysql_data:

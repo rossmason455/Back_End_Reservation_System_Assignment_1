@@ -1,9 +1,10 @@
 'use strict';
-const { faker } = require('@faker-js/faker');
+
 const bcrypt = require('bcrypt');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    const { faker } = await import('@faker-js/faker');
     const users = [];
 
 
