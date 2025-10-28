@@ -8,13 +8,13 @@ function calculateAmount(booking) {
   let amount;
 
   switch (resourceType.toLowerCase()) {
-    case 'doctor':
+    case "doctor":
       amount = 150.0;
       break;
-    case 'restaurant table':
+    case "restaurant table":
       amount = 80.0;
       break;
-    case 'meeting room':
+    case "meeting room":
       amount = 120.0;
       break;
     default:

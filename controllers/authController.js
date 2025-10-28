@@ -31,12 +31,16 @@ exports.register = async (req, res) => {
       email,
       password: hashedPassword,
       phone,
-      role
+      role,
     });
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role}, JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.status(201).json({ message: "User registered successfully", token });
   } catch (err) {
@@ -68,9 +72,13 @@ exports.login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.status(200).json({
       message: "Login successful",
@@ -86,35 +94,29 @@ exports.login = async (req, res) => {
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
 
-
-
-
-
-
 /* ****************************************************************************************** */
 /* ************************************** LOGOUT USER *************************************** */
 /* ****************************************************************************************** */
 
 exports.logout = async (req, res) => {
   try {
-
     const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(400).json({ message: 'No token provided' });
+    if (!authHeader)
+      return res.status(400).json({ message: "No token provided" });
 
-    const token = authHeader.split(' ')[1];
-
+    const token = authHeader.split(" ")[1];
 
     await Token.create({
       token,
-       user_id: req.user.id,            
+      user_id: req.user.id,
       blacklisted: true,
-      expires_at: new Date(Date.now() + 3600000) 
+      expires_at: new Date(Date.now() + 3600000),
     });
 
-    res.status(200).json({ message: 'Logged out successfully' });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
-    console.error('LOGOUT ERROR:', err);
-    res.status(500).json({ message: 'Server error', error: err.message });
+    console.error("LOGOUT ERROR:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 

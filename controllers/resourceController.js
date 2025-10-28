@@ -3,11 +3,9 @@ const DoctorDetail = require("../mongodb_models/doctorDetail");
 const RestaurantDetail = require("../mongodb_models/restaurantDetail");
 const MeetingRoomDetail = require("../mongodb_models/meetingRoomDetail");
 
-
 /* ****************************************************************************************** */
 /* ************************************* GET A SINGLE RESOURCE ****************************** */
 /* ****************************************************************************************** */
-
 
 exports.getResourceById = async (req, res) => {
   try {
@@ -19,7 +17,7 @@ exports.getResourceById = async (req, res) => {
       return res.status(404).json({ message: "Resource not found" });
     }
 
-     let detail = null;
+    let detail = null;
 
     switch (resource.type) {
       case "doctor":
@@ -38,9 +36,9 @@ exports.getResourceById = async (req, res) => {
         break;
     }
 
-     const response = {
-      resource, 
-      detail    
+    const response = {
+      resource,
+      detail,
     };
 
     return res.status(200).json({
@@ -63,20 +61,24 @@ exports.getResourceById = async (req, res) => {
 
 exports.getAllResources = async (req, res) => {
   try {
-  
     const resources = await Resource.findAll();
 
-  
     const resourcesWithDetails = await Promise.all(
       resources.map(async (resource) => {
         let mongoDetail = null;
 
         if (resource.type === "doctor") {
-          mongoDetail = await DoctorDetail.findOne({ my_sql_resource_id: resource.id });
+          mongoDetail = await DoctorDetail.findOne({
+            my_sql_resource_id: resource.id,
+          });
         } else if (resource.type === "restaurant table") {
-          mongoDetail = await RestaurantDetail.findOne({ my_sql_resource_id: resource.id });
+          mongoDetail = await RestaurantDetail.findOne({
+            my_sql_resource_id: resource.id,
+          });
         } else if (resource.type === "meeting room") {
-          mongoDetail = await MeetingRoomDetail.findOne({ my_sql_resource_id: resource.id });
+          mongoDetail = await MeetingRoomDetail.findOne({
+            my_sql_resource_id: resource.id,
+          });
         }
 
         return {
@@ -84,7 +86,7 @@ exports.getAllResources = async (req, res) => {
           name: resource.name,
           type: resource.type,
           status: resource.status,
-          details: mongoDetail || null, 
+          details: mongoDetail || null,
         };
       })
     );

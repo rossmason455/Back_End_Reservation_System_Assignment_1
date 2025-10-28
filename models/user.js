@@ -1,47 +1,45 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    
     static associate(models) {
-       User.hasMany(models.Booking, { foreignKey: 'user_id' });
-      
+      User.hasMany(models.Booking, { foreignKey: "user_id" });
     }
   }
-  User.init({
-    username: {
+  User.init(
+    {
+      username: {
         type: DataTypes.STRING(100),
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: true
+        unique: true,
       },
-       password: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    },
+      password: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
       phone: {
         type: DataTypes.STRING(50),
-        allowNull: true
+        allowNull: true,
       },
       role: {
-  type: DataTypes.ENUM('user', 'admin'),
-  allowNull: false,
-  defaultValue: 'user'
-}
-     
-  }, {
-    sequelize,
-    modelName: 'User',
-    timestamps: true, 
-    tableName: 'users',     
-    freezeTableName: true,        
-    createdAt: 'created_at',  
-    updatedAt: 'updated_at'
-  });
+        type: DataTypes.ENUM("user", "admin"),
+        allowNull: false,
+        defaultValue: "user",
+      },
+    },
+    {
+      sequelize,
+      modelName: "User",
+      timestamps: true,
+      tableName: "users",
+      freezeTableName: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
   return User;
 };

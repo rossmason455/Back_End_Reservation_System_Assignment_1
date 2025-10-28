@@ -1,14 +1,13 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Token extends Model {
     static associate(models) {
-
       Token.belongsTo(models.User, {
-        foreignKey: 'user_id',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        foreignKey: "user_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
     }
   }
@@ -16,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Token.init(
     {
       token: {
-        type: DataTypes.STRING(500), 
+        type: DataTypes.STRING(500),
         allowNull: false,
         unique: true,
       },
@@ -24,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users'
+          model: "Users",
         },
       },
       expires_at: {
@@ -38,12 +37,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Token',
-      tableName: 'tokens',     
+      modelName: "Token",
+      tableName: "tokens",
       freezeTableName: true,
       timestamps: true,
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
 

@@ -19,10 +19,8 @@ describe("Resource Endpoints", () => {
   };
 
   beforeAll(async () => {
-    
     await sequelize.sync({ force: true });
 
-    
     const registerRes = await request(app)
       .post("/api/auth/register")
       .send(adminUser);
@@ -30,17 +28,14 @@ describe("Resource Endpoints", () => {
     expect(registerRes.statusCode).toBe(201);
     authToken = registerRes.body.token;
 
-    
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(process.env.MONGO_URL_TEST);
     }
 
-    
     await DoctorDetail.deleteMany({});
     await RestaurantDetail.deleteMany({});
     await MeetingRoomDetail.deleteMany({});
 
-    
     doctorResource = await Resource.create({
       name: "Dr. Smith",
       type: "doctor",
@@ -59,7 +54,6 @@ describe("Resource Endpoints", () => {
       status: "available",
     });
 
-    
     await DoctorDetail.create({
       my_sql_resource_id: doctorResource.id,
       bio: "Experienced cardiologist with 10 years in practice.",
@@ -94,11 +88,11 @@ describe("Resource Endpoints", () => {
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBe(3);
 
-    const doctor = res.body.find(r => r.type === "doctor");
+    const doctor = res.body.find((r) => r.type === "doctor");
     expect(doctor).toHaveProperty("name", "Dr. Smith");
-    const restaurant = res.body.find(r => r.type === "restaurant table");
+    const restaurant = res.body.find((r) => r.type === "restaurant table");
     expect(restaurant).toHaveProperty("name", "La Bella");
-    const meetingRoom = res.body.find(r => r.type === "meeting room");
+    const meetingRoom = res.body.find((r) => r.type === "meeting room");
     expect(meetingRoom).toHaveProperty("name", "Conference Room A");
   });
 
@@ -115,7 +109,10 @@ describe("Resource Endpoints", () => {
     expect(resource).toHaveProperty("name", "Dr. Smith");
     expect(resource).toHaveProperty("type", "doctor");
 
-    expect(detail).toHaveProperty("bio", "Experienced cardiologist with 10 years in practice.");
+    expect(detail).toHaveProperty(
+      "bio",
+      "Experienced cardiologist with 10 years in practice."
+    );
     expect(detail.specializations).toContain("Cardiology");
   });
 });

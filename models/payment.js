@@ -1,13 +1,13 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Payment extends Model {
     static associate(models) {
       Payment.belongsTo(models.Booking, {
-        foreignKey: 'booking_id',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        foreignKey: "booking_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       });
     }
   }
@@ -17,43 +17,42 @@ module.exports = (sequelize, DataTypes) => {
       booking_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: 'Bookings' }
+        references: { model: "Bookings" },
       },
       amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
 
         get() {
-            const rawValue = this.getDataValue('amount');
-            return rawValue === null ? null : parseFloat(rawValue).toFixed(2);
-        }
+          const rawValue = this.getDataValue("amount");
+          return rawValue === null ? null : parseFloat(rawValue).toFixed(2);
+        },
       },
       status: {
-        type: DataTypes.ENUM('pending', 'completed', 'failed'),
-        allowNull: false
+        type: DataTypes.ENUM("pending", "completed", "failed"),
+        allowNull: false,
       },
       payment_date: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
       },
-        createdAt: {
+      createdAt: {
         type: DataTypes.DATE,
-        field: 'created_at'  
+        field: "created_at",
       },
       updatedAt: {
         type: DataTypes.DATE,
-        field: 'updated_at'  
-      }
-      
+        field: "updated_at",
+      },
     },
     {
       sequelize,
-      modelName: 'Payment',
-      tableName: 'payments',     
-    freezeTableName: true,
-    timestamps: true,
-    createdAt: 'created_at',
-      updatedAt: 'updated_at',
+      modelName: "Payment",
+      tableName: "payments",
+      freezeTableName: true,
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     }
   );
 

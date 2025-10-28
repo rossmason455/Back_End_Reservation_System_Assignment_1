@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -27,10 +27,8 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-    
+
     command: sh -c './setup.sh'
-    
-   
 
   mysql:
     image: mysql:8.0
@@ -45,16 +43,26 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      
+
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$${MYSQL_ROOT_PASSWORD}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
 
-    mysql_test:
+  mysql_test:
     image: mysql:8.0
-    container_name: reservation_mysql
+    container_name: reservation_mysql_test
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: some_secure_root_password
@@ -64,14 +72,23 @@ services:
     ports:
       - "3308:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-      
+      - mysql_test_data:/var/lib/mysql
+
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$${MYSQL_ROOT_PASSWORD}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
-      
 
   mongo:
     image: mongo:6.0
@@ -87,13 +104,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
-    mongo_test:
+
+  mongo_test:
     image: mongo:6.0
     container_name: reservation_mongo_test
     restart: unless-stopped
     ports:
-      - "27018:27017" 
+      - "27018:27017"
     volumes:
       - mongo_test_data:/data/db
     environment:
@@ -102,8 +119,10 @@ services:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
-      retries: 5  
+      retries: 5
 
 volumes:
   mysql_data:
   mongo_data:
+  mysql_test_data:
+  mongo_test_data:

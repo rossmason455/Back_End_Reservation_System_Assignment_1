@@ -1,30 +1,33 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const reviewSchema = new mongoose.Schema({
-  my_sql_resource_id: {
-    type: Number,    
-    required: true
+const reviewSchema = new mongoose.Schema(
+  {
+    my_sql_resource_id: {
+      type: Number,
+      required: true,
+    },
+    user_id: {
+      type: Number,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
+    },
+    comment: {
+      type: String,
+      trim: true,
+    },
+    created_at: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  user_id: {
-    type: Number,
-    required: true
-  },
-  rating: {
-    type: Number,    
-    required: true,
-    min: 1,
-    max: 5
-  },
-  comment: {
-    type: String,
-    trim: true
-  },
-  created_at: {
-    type: Date,
-    default: Date.now
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Review = mongoose.model('Review', reviewSchema);
+const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;

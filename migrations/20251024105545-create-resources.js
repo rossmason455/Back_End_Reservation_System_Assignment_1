@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-   await queryInterface.createTable('resources', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("resources", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -15,13 +15,13 @@ module.exports = {
         allowNull: false,
       },
       type: {
-        type: Sequelize.ENUM('doctor', 'restaurant', 'meeting room'),
+        type: Sequelize.ENUM("doctor", "restaurant", "meeting room"),
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('available', 'unavailable'),
+        type: Sequelize.ENUM("available", "unavailable"),
         allowNull: false,
-        defaultValue: 'available',
+        defaultValue: "available",
       },
       created_at: {
         type: Sequelize.DATE,
@@ -32,12 +32,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
-      }
+      },
     });
-  
   },
 
-  async down (queryInterface, Sequelize) {
-   await queryInterface.dropTable('resources');
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("resources");
+  },
 };

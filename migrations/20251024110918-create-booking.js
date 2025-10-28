@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-   await queryInterface.createTable('bookings', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("bookings", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -13,16 +13,16 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'users', key: 'id' },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        references: { model: "users", key: "id" },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       resource_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'resources', key: 'id' },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        references: { model: "resources", key: "id" },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       booking_date: {
         type: Sequelize.DATEONLY,
@@ -37,9 +37,9 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'confirmed', 'cancelled'),
+        type: Sequelize.ENUM("pending", "confirmed", "cancelled"),
         allowNull: false,
-        defaultValue: 'pending',
+        defaultValue: "pending",
       },
       created_at: {
         type: Sequelize.DATE,
@@ -50,11 +50,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
-      }
+      },
     });
   },
 
-  async down (queryInterface, Sequelize) {
-     await queryInterface.dropTable('bookings');
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("bookings");
+  },
 };

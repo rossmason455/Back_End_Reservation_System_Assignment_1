@@ -4,8 +4,6 @@ const { body } = require("express-validator");
 const authController = require("../controllers/authController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
-
-
 /*************************************** REGISTER ROUTE **************************************/
 
 router.post(
@@ -34,7 +32,6 @@ router.post(
   ],
   authController.login
 );
-
 
 /* ************************************** LOGOUT ROUTE ****************************************/
 

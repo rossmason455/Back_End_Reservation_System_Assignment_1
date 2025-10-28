@@ -1,22 +1,26 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const meetingRoomDetailSchema = new mongoose.Schema({
-  my_sql_resource_id: {
-    type: Number,
-    required: true,
-    unique: true
+const meetingRoomDetailSchema = new mongoose.Schema(
+  {
+    my_sql_resource_id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+    capacity: {
+      type: Number,
+      required: true,
+    },
+    amenities: {
+      type: [String],
+      default: [],
+    },
   },
-  capacity: {
-    type: Number,
-    required: true
-  },
-  amenities: {
-    type: [String],
-    default: []
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const MeetingRoomDetail = mongoose.models.MeetingRoomDetail || mongoose.model('MeetingRoomDetail', meetingRoomDetailSchema);
-
+const MeetingRoomDetail =
+  mongoose.models.MeetingRoomDetail ||
+  mongoose.model("MeetingRoomDetail", meetingRoomDetailSchema);
 
 module.exports = MeetingRoomDetail;

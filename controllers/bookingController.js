@@ -10,88 +10,92 @@ const MeetingRoomDetail = require("../mongodb_models/meetingRoomDetail");
 
 exports.createBooking = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const { resource_id, booking_date, start_time, end_time } = req.body;
 
-    
     const resource = await Resource.findByPk(resource_id);
-    if (!resource) return res.status(404).json({ message: "Resource not found" });
+    if (!resource)
+      return res.status(404).json({ message: "Resource not found" });
 
-    
     if (resource.status !== "available") {
-      return res.status(400).json({ message: "Resource is not available for booking" });
+      return res
+        .status(400)
+        .json({ message: "Resource is not available for booking" });
     }
 
-    
     const overlapping = await Booking.findOne({
       where: {
         resource_id,
         booking_date,
         start_time: { [Op.lt]: end_time },
         end_time: { [Op.gt]: start_time },
-        status: ["pending", "confirmed"] 
-      }
+        status: ["pending", "confirmed"],
+      },
     });
 
     if (overlapping) {
-      return res.status(400).json({ message: "Resource is already booked for this time slot" });
+      return res
+        .status(400)
+        .json({ message: "Resource is already booked for this time slot" });
     }
 
-    
     const booking = await Booking.create({
       user_id: userId,
       resource_id,
       booking_date,
       start_time,
       end_time,
-      status: "pending" 
+      status: "pending",
     });
 
     res.status(201).json({
       message: "Booking created successfully",
-      booking
+      booking,
     });
-
   } catch (err) {
     console.error("CREATE BOOKING ERROR:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-
 /* ****************************************************************************************** */
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
-
 
 /* ****************************************************************************************** */
 /* ************************************* GET ALL OF A USERS BOOKINGS ************************ */
 /* ****************************************************************************************** */
 
-
 exports.getUserBookings = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
-    
     const bookings = await Booking.findAll({
       where: { user_id: userId },
       include: [{ model: Resource }],
-      order: [["booking_date", "ASC"], ["start_time", "ASC"]],
+      order: [
+        ["booking_date", "ASC"],
+        ["start_time", "ASC"],
+      ],
     });
 
-    
     const bookingsWithDetails = await Promise.all(
       bookings.map(async (booking) => {
-        const resource = booking.Resource; 
+        const resource = booking.Resource;
         let mongoDetail = null;
 
         if (resource.type === "doctor") {
-          mongoDetail = await DoctorDetail.findOne({ my_sql_resource_id: resource.id });
+          mongoDetail = await DoctorDetail.findOne({
+            my_sql_resource_id: resource.id,
+          });
         } else if (resource.type === "restaurant table") {
-          mongoDetail = await RestaurantDetail.findOne({ my_sql_resource_id: resource.id });
+          mongoDetail = await RestaurantDetail.findOne({
+            my_sql_resource_id: resource.id,
+          });
         } else if (resource.type === "meeting room") {
-          mongoDetail = await MeetingRoomDetail.findOne({ my_sql_resource_id: resource.id });
+          mongoDetail = await MeetingRoomDetail.findOne({
+            my_sql_resource_id: resource.id,
+          });
         }
 
         return {
@@ -128,10 +132,9 @@ exports.getUserBookings = async (req, res) => {
 
 exports.getBookingById = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const bookingId = req.params.id;
 
-    
     const booking = await Booking.findOne({
       where: { id: bookingId },
       include: [{ model: Resource }],
@@ -141,24 +144,27 @@ exports.getBookingById = async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    
     if (booking.user_id !== userId && req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    
     const resource = booking.Resource;
     let mongoDetail = null;
 
     if (resource.type === "doctor") {
-      mongoDetail = await DoctorDetail.findOne({ my_sql_resource_id: resource.id });
+      mongoDetail = await DoctorDetail.findOne({
+        my_sql_resource_id: resource.id,
+      });
     } else if (resource.type === "restaurant table") {
-      mongoDetail = await RestaurantDetail.findOne({ my_sql_resource_id: resource.id });
+      mongoDetail = await RestaurantDetail.findOne({
+        my_sql_resource_id: resource.id,
+      });
     } else if (resource.type === "meeting room") {
-      mongoDetail = await MeetingRoomDetail.findOne({ my_sql_resource_id: resource.id });
+      mongoDetail = await MeetingRoomDetail.findOne({
+        my_sql_resource_id: resource.id,
+      });
     }
 
-    
     const response = {
       id: booking.id,
       booking_date: booking.booking_date,
@@ -185,42 +191,35 @@ exports.getBookingById = async (req, res) => {
 /* ************************************* END ************************************************ */
 /* ****************************************************************************************** */
 
-
 /* ****************************************************************************************** */
 /* ************************************* UPDATE BOOKING STATUS ****************************** */
 /* ****************************************************************************************** */
 
-
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     const userRole = req.user.role;
     const bookingId = req.params.id;
     const { status } = req.body;
 
-    
-    const allowedStatuses = userRole === "admin" 
-      ? ["confirmed", "cancelled"] 
-      : ["cancelled"]; 
+    const allowedStatuses =
+      userRole === "admin" ? ["confirmed", "cancelled"] : ["cancelled"];
 
     if (!allowedStatuses.includes(status)) {
-      return res.status(403).json({ 
-        message: `You are not allowed to set status to "${status}"` 
+      return res.status(403).json({
+        message: `You are not allowed to set status to "${status}"`,
       });
     }
 
-    
     const booking = await Booking.findOne({ where: { id: bookingId } });
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-   
     if (userRole !== "admin" && booking.user_id !== userId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    
     booking.status = status;
     await booking.save();
 

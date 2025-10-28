@@ -27,7 +27,6 @@ describe("Payment Endpoints", () => {
   };
 
   beforeAll(async () => {
-    
     await sequelize.sync({ force: true });
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(process.env.MONGO_URL_TEST);
@@ -35,32 +34,32 @@ describe("Payment Endpoints", () => {
     await DoctorDetail.deleteMany({});
     await Payment.destroy({ where: {} });
 
-   
-    const adminRes = await request(app).post("/api/auth/register").send(adminUser);
+    const adminRes = await request(app)
+      .post("/api/auth/register")
+      .send(adminUser);
     expect(adminRes.statusCode).toBe(201);
     adminToken = adminRes.body.token;
 
-    const userRes = await request(app).post("/api/auth/register").send(normalUser);
+    const userRes = await request(app)
+      .post("/api/auth/register")
+      .send(normalUser);
     expect(userRes.statusCode).toBe(201);
     userToken = userRes.body.token;
 
-   
     doctorResource = await Resource.create({
       name: "Dr. Smith",
       type: "doctor",
       status: "available",
     });
 
-    
     await DoctorDetail.create({
       my_sql_resource_id: doctorResource.id,
       bio: "Experienced cardiologist with 10 years in practice.",
       specializations: ["Cardiology", "Internal Medicine"],
     });
 
-    
     confirmedBooking = await Booking.create({
-      user_id: 2, 
+      user_id: 2,
       resource_id: doctorResource.id,
       booking_date: "2025-11-01",
       start_time: "10:00",
@@ -73,7 +72,6 @@ describe("Payment Endpoints", () => {
     await sequelize.close();
     await mongoose.connection.close();
   });
-
 
   /* ************************************* CREATE PAYMENT ************************************ */
 
@@ -88,19 +86,21 @@ describe("Payment Endpoints", () => {
     expect(res.body.payment).toHaveProperty("status", "pending");
   });
 
+  /* ************************************* DUPLICATE PAYMENT ********************************* */
 
-   /* ************************************* DUPLICATE PAYMENT ********************************* */
-  
   it("should not allow duplicate payments for the same booking", async () => {
     const res = await request(app)
       .post(`/api/payment/${confirmedBooking.id}/pay`)
       .set("Authorization", `Bearer ${userToken}`);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body).toHaveProperty("message", "Payment already exists for this booking");
+    expect(res.body).toHaveProperty(
+      "message",
+      "Payment already exists for this booking"
+    );
   });
 
-    /* ************************************* GET PAYMENT BY BOOKING **************************** */
+  /* ************************************* GET PAYMENT BY BOOKING **************************** */
 
   it("should retrieve payment details for a booking", async () => {
     const res = await request(app)
@@ -108,13 +108,16 @@ describe("Payment Endpoints", () => {
       .set("Authorization", `Bearer ${userToken}`);
 
     expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveProperty("message", "Payment retrieved successfully");
+    expect(res.body).toHaveProperty(
+      "message",
+      "Payment retrieved successfully"
+    );
     expect(res.body.payment).toHaveProperty("amount", "150.00");
     expect(res.body.payment.Booking).toBeDefined();
     expect(res.body.payment.Booking.Resource.name).toBe("Dr. Smith");
   });
 
-    /* ************************************* GET ALL PAYMENTS (ADMIN) *************************** */
+  /* ************************************* GET ALL PAYMENTS (ADMIN) *************************** */
 
   it("should allow admin to retrieve all payments", async () => {
     const res = await request(app)
@@ -127,7 +130,6 @@ describe("Payment Endpoints", () => {
     expect(res.body.count).toBeGreaterThanOrEqual(1);
   });
 
-
   /* ************************************* ACCESS CONTROL ************************************* */
 
   it("should prevent normal users from accessing all payments", async () => {
@@ -138,6 +140,4 @@ describe("Payment Endpoints", () => {
     expect(res.statusCode).toBe(403);
     expect(res.body).toHaveProperty("message", "Access denied. Admins only.");
   });
-
-
 });

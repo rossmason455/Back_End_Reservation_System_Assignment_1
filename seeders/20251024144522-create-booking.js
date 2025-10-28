@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    const { faker } = await import('@faker-js/faker');
+  async up(queryInterface, Sequelize) {
+    const { faker } = await import("@faker-js/faker");
 
- const users = await queryInterface.sequelize.query(
-      'SELECT id FROM users;',
+    const users = await queryInterface.sequelize.query(
+      "SELECT id FROM users;",
       { type: Sequelize.QueryTypes.SELECT }
     );
     const resources = await queryInterface.sequelize.query(
-      'SELECT id FROM resources;',
+      "SELECT id FROM resources;",
       { type: Sequelize.QueryTypes.SELECT }
     );
 
@@ -28,18 +28,22 @@ module.exports = {
         user_id: user.id,
         resource_id: resource.id,
         booking_date: bookingDate,
-        start_time: `${String(startHour).padStart(2, '0')}:00:00`,
-        end_time: `${String(endHour).padStart(2, '0')}:00:00`,
-        status: faker.helpers.arrayElement(['pending', 'confirmed', 'cancelled']),
+        start_time: `${String(startHour).padStart(2, "0")}:00:00`,
+        end_time: `${String(endHour).padStart(2, "0")}:00:00`,
+        status: faker.helpers.arrayElement([
+          "pending",
+          "confirmed",
+          "cancelled",
+        ]),
         created_at: new Date(),
         updated_at: new Date(),
       });
     }
 
-    await queryInterface.bulkInsert('bookings', bookings, {});
+    await queryInterface.bulkInsert("bookings", bookings, {});
   },
 
-  async down (queryInterface, Sequelize) {
-   await queryInterface.bulkDelete('bookings', null, {});
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("bookings", null, {});
+  },
 };

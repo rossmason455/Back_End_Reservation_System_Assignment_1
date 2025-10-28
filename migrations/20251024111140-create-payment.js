@@ -1,10 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    
-    await queryInterface.createTable('payments', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("payments", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -14,18 +13,18 @@ module.exports = {
       booking_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'bookings', key: 'id' },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        references: { model: "bookings", key: "id" },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       amount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'completed', 'failed'),
+        type: Sequelize.ENUM("pending", "completed", "failed"),
         allowNull: false,
-        defaultValue: 'pending',
+        defaultValue: "pending",
       },
       payment_date: {
         type: Sequelize.DATE,
@@ -41,11 +40,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
-      }
+      },
     });
   },
 
-  async down (queryInterface, Sequelize) {
-  await queryInterface.dropTable('payments');
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("payments");
+  },
 };

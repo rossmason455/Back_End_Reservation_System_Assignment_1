@@ -1,15 +1,10 @@
-require('dotenv').config({ path: '.env.test' });
 const { sequelize } = require("../models");
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
 
 beforeAll(async () => {
   await sequelize.sync({ force: true });
 
-await mongoose.connect(process.env.MONGO_URL_TEST, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  await mongoose.connect(process.env.MONGO_URL_TEST);
 });
 
 afterAll(async () => {
