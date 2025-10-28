@@ -52,6 +52,27 @@ services:
       timeout: 5s
       retries: 5
 
+    mysql_test:
+    image: mysql:8.0
+    container_name: reservation_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: some_secure_root_password
+      MYSQL_USER: reservation_user
+      MYSQL_PASSWORD: R3serv@tionApp!
+      MYSQL_DATABASE: reservation_db_test
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+
   mongo:
     image: mongo:6.0
     container_name: reservation_mongo
@@ -61,6 +82,22 @@ services:
     volumes:
       - mongo_data:/data/db
 
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+    mongo_test:
+    image: mongo:6.0
+    container_name: reservation_mongo_test
+    restart: unless-stopped
+    ports:
+      - "27018:27017" 
+    volumes:
+      - mongo_test_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: reservation_mongo_test
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
