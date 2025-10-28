@@ -1,6 +1,7 @@
+require('dotenv').config({ path: '.env.test' });
 const { sequelize } = require("../models");
 const mongoose = require('mongoose');
-require('dotenv').config();
+
 
 beforeAll(async () => {
   await sequelize.sync({ force: true });
